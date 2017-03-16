@@ -1,0 +1,73 @@
+1. remove duplicates in a query response
+
+SELECT DISTINCT * FROM post
+
+posts = Post.all.distinct()
+
+2. filter records using inequalities, pattern matching, ranges, and boolean logic
+
+SELECT * FROM post
+WHERE user_id < 3
+AND title LIKE 'L%'
+OR body BETWEEN 'S' AND 'U';
+
+posts = Post.where((user_id < 3 && title[0] == 'L') || /[s-u].match(body[0]))
+
+3. sort records in a particular order
+
+SELECT * FROM post
+ORDER BY title;
+
+posts = Post.all.order(title: ASC)
+
+4. limit the number of records returned
+
+SELECT * FROM comment
+LIMIT 1;
+
+comment = Comment.take
+
+5. group records into sections
+
+SELECT user_id, COUNT(*) AS 'Total Posts' FROM post
+GROUP BY user_id;
+
+posts = Post.all
+posts.each do |post|
+  post.user.post_count += 1
+end
+
+6. perform calculations using aggregate functions
+
+SELECT COUNT(title)
+FROM post;
+
+posts = Post.all
+count = 0
+posts.each do |post|
+  count += 1
+end
+
+7. join tables using cross join, inner join, and outer join
+
+SELECT post.title, user.name, user.email
+FROM post
+CROSS JOIN user;
+
+SELECT comment.body, user.name, user.email FROM comment
+INNER JOIN user
+ON comment.user_id = user.id;
+
+SELECT post.title, user.name
+FROM user
+LEFT OUTER JOIN post
+ON user.id = post.user_id;
+
+posts = Post.all
+users = User.all
+comments = Comment.all
+posts.each do |post|
+  user = post.user_id
+  username = user.name
+  userEmail = user.email
+end
